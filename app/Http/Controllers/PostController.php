@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostDetailResource;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Models\Post3;
@@ -19,9 +20,15 @@ class PostController extends Controller
     }
 
     public function show($id) {
-        $post = Posts3::findOrFail($id);
+        $post = Posts3::with('writer:id,email,username,notelepon,level')->findOrFail($id);
         //return response()->json( ['data' => $post]);
 
-        return new PostResource($post);
+        //return new PostResource($post);
+        return new PostDetailResource($post);
+    }
+
+    public function show2($id) {
+        $post = Posts3::findOrFail($id);
+        return new PostDetailResource($post);
     }
 }

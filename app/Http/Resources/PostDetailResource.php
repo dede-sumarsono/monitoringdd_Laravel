@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostResource extends JsonResource
+class PostDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,9 +14,7 @@ class PostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        //return parent::toArray($request);
-
-        return [
+       return [
             'id' => $this->id,
             "id_pembuat" => $this -> id_pembuat,
             "id_untuk_user" => $this-> id_untuk_user,
@@ -28,8 +26,10 @@ class PostResource extends JsonResource
             "dokumen" => $this-> dokumen,
             "created_at" => date_format($this -> created_at,"Y/m/d H:i:s"),
             "updated_at" => $this-> updated_at,
-            
-            
-        ];
+
+            "nomor_penulis" => $this->id_pembuat,
+            'writer' => $this->whenLoaded('writer')
+       ]; 
+    
     }
 }
