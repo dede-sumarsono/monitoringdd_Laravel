@@ -16,7 +16,7 @@ class PostController extends Controller
 
         //return PostResource::collection($posts); tanpa embell"
         //return PostDetailResource::collection($posts); tanpa embell"
-        //return PostDetailResource::collection($posts->LoadMissing('writer:id,email,username,notelepon,level'));
+        return PostDetailResource::collection($posts->LoadMissing('writer:id,email,username,notelepon,level'));
     }
 
     public function show($id) {
@@ -53,6 +53,29 @@ class PostController extends Controller
     }
 
     function update(Request $request, $id) {
-        dd('ini method update');
+        $validated = $request->validate([
+            'id_untuk_user' => 'required',
+            'jenis_layanan' => 'required',
+            'jenis_pesanan' => 'required',
+            'keterangan' => 'required',
+        ]);
+
+        $user = User::where('id', $request->id_untuk_user)->first();       
+        $request['username_untuk_user'] = $user->username;       
+        $request['status'] = 'pendaftar update';
+
+        $post = Posts3::findOrFail($id);
+        $post->update($request->all());
+
+        return new PostDetailResource($post->loadMissing('writer:id,email,username,notelepon,level'));
+
+    }
+
+    function destroy($id) {
+        $post = Posts3::findOrFail($id);
+        $post->delete();
+        return new PostDetailResource($post->loadMissing('writer:id,email,username,notelepon,level'));
+
+
     }
 }
