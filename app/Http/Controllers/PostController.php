@@ -7,6 +7,7 @@ use App\Models\Posts3;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -34,12 +35,27 @@ class PostController extends Controller
 
     function store(Request $request) {
 
+       //return $request->file;
+
         $validated = $request->validate([
             'id_untuk_user' => 'required',
             'jenis_layanan' => 'required',
             'jenis_pesanan' => 'required',
             'keterangan' => 'required',
         ]);
+
+        ///////////////upload file
+        $dokumen = null;
+        if ($request->file) {
+            $filename = $this->generateRandomString();
+            $extension = $request->file->extension();
+            $dokumen = $filename.'.'.$extension;
+            
+            Storage::putFileAs('dokumen',$request->file,$filename.'.'.$dokumen);
+        }
+        $request['dokumen'] = $dokumen;
+
+        //////////////end upload file
         
         $user = User::where('id', $request->id_untuk_user)->first();
 
@@ -78,4 +94,25 @@ class PostController extends Controller
 
 
     }
+
+
+
+
+
+
+
+
+
+
+    ////////////////////////Generate random string for upload file
+    function generateRandomString($length = 30) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+    /////////////////////////End Generate random string
 }
