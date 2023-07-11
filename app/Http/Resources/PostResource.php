@@ -25,9 +25,10 @@ class PostResource extends JsonResource
             "jenis_pesanan" => $this-> jenis_pesanan,
             "keterangan" => $this-> keterangan,
             "status" => $this-> status,
+            "status_number" => $this-> status_number,
             "dokumen" => $this-> dokumen,
             "created_at" => date_format($this -> created_at,"Y/m/d H:i:s"),
-            "updated_at" => $this-> updated_at,
+            "updated_at" => $this-> updated_at,asd
             
             
         ];

@@ -27,7 +27,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/logout',[AuthenticationController::class,'logout']);
     Route::get('/me',[AuthenticationController::class,'me']);
+    //Route::get('/getalluser',[AuthenticationController::class,'getalluser'])->middleware('pemilik-postingan');
+    //mendapatkan user dengan level status 2
+    Route::get('/getalluser',[AuthenticationController::class,'getalluser']);
+    Route::post('/updatelevel/{id}',[AuthenticationController::class,'updatelevel']);
+    Route::post('/deleteuser/{id}',[AuthenticationController::class,'deleteuser']);
 
+    Route::get('/getuserorder/{id}',[PostController::class,'userorder']);
+    Route::get('/getuserordercount/{id}',[PostController::class,'userordertotal']);
+    Route::get('/getuserordercount2/{id}',[PostController::class,'userordertotal2']);
+    Route::get('/jumlahstatuspesanan',[PostController::class,'jumlahstatuspesanan']);
     Route::post('/post',[PostController::class,'store']);
     Route::put('/post/{id}',[PostController::class,'update'])->middleware('pemilik-postingan');
     Route::delete('/post/{id}',[PostController::class,'destroy'])->middleware('pemilik-postingan');
@@ -35,4 +44,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
 Route::post('/login',[AuthenticationController::class,'login']);
+Route::post('/register',[AuthenticationController::class,'register']);
+
 

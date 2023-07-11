@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PostDetailResource;
+use App\Http\Resources\postStatusResource;
 use App\Models\Posts3;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -63,6 +64,7 @@ class PostController extends Controller
         $request['id_pembuat'] = Auth::user()->id;        
         $request['username_untuk_user'] = $user->username;       
         $request['status'] = 'pendaftar baru';
+        $request['status_number'] = 0;
         $post = Posts3::create($request->all());
         return new PostDetailResource($post->loadMissing('writer:id,email,username,notelepon,level'));
 
@@ -94,6 +96,96 @@ class PostController extends Controller
 
 
     }
+
+    public function userorder($id) {
+        //$posts = Posts3::all();
+        //return response()->json( ['data' => $posts]);
+        $posts = Posts3::where('id_untuk_user','=',$id)->get();
+        //return PostResource::collection($posts); tanpa embell"
+        //return PostDetailResource::collection($posts); tanpa embell"
+        return PostDetailResource::collection($posts->LoadMissing('writer:id,email,username,notelepon,level'));
+    }
+
+    public function userordertotal($id) {
+        
+        
+        $posts = Posts3::where('id_untuk_user','=',$id)
+                    ->where('status_number','<',5)
+                    ->get();
+        $postsCount = count($posts);
+        return response()->json( ['data' => $postsCount]);
+        //return PostDetailResource::collection($posts->LoadMissing('writer:id,email,username,notelepon,level'));
+    }
+
+    public function userordertotal2($id) {
+        
+        
+        $posts = Posts3::where('id_untuk_user','=',$id)
+                    ->where('status_number','>',4)
+                    ->get();
+        $postsCount = count($posts);
+        return response()->json( ['data' => $postsCount]);
+        //return PostDetailResource::collection($posts->LoadMissing('writer:id,email,username,notelepon,level'));
+    }
+
+    public function jumlahstatuspesanan() {
+        
+        
+        $posts = Posts3::where('status_number','=',0)->get();
+        $posts2 = Posts3::where('status_number','=',1)->get();
+        $posts3 = Posts3::where('status_number','=',2)->get();
+        $posts4 = Posts3::where('status_number','=',3)->get();
+        $posts5 = Posts3::where('status_number','=',4)->get();
+        $posts6 = Posts3::where('status_number','=',5)->get();
+        $posts7 = Posts3::where('status_number','=',6)->get();
+        $posts8 = Posts3::where('status_number','=',7)->get();
+        $posts9 = Posts3::where('status_number','=',8)->get();
+        $posts10 = Posts3::where('status_number','=',9)->get();
+        $posts11 = Posts3::where('status_number','=',10)->get();
+        $posts12 = Posts3::where('status_number','=',11)->get();
+                    
+        $postsCount = count($posts);
+        $postsCount2 = count($posts2);
+        $postsCount3 = count($posts3);
+        $postsCount4 = count($posts4);
+        $postsCount5 = count($posts5);
+        $postsCount6 = count($posts6);
+        $postsCount7 = count($posts7);
+        $postsCount8 = count($posts8);
+        $postsCount9 = count($posts9);
+        $postsCount10 = count($posts10);
+        $postsCount11 = count($posts11);
+        $postsCount12 = count($posts12);
+        
+
+        return response()->json( ['data' => 
+        ['Pendaftar Baru'=>$postsCount,
+        'Verifikasi Dokumen'=>$postsCount2,
+        'Pendaftaran Pajak Oleh Notaris'=>$postsCount3,
+        'Pendaftaran Selesai'=>$postsCount4,
+        'Proses Real'=>$postsCount5,
+        'Proses Pajak'=>$postsCount6,
+        'Proses Validasi'=>$postsCount7,
+        'Proses Checking'=>$postsCount8,
+        'Proses Balik Nama'=>$postsCount9,
+        'Proses Peningkatan'=>$postsCount10,
+        'Proses HT'=>$postsCount11,
+        'Sertifikat Sudah Keluar'=>$postsCount12,
+        
+        
+        ]]);
+        
+        
+        
+        //return postStatusResource::collection([$postsCount,$postsCount2]);
+        //return postStatusResource::collection($postsCount);
+    
+    }
+
+    
+
+
+    
 
 
 

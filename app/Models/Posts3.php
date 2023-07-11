@@ -12,7 +12,7 @@ class Posts3 extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable =[
-        'id_pembuat','id_untuk_user','username_untuk_user','jenis_layanan','jenis_pesanan','keterangan','status','dokumen'
+        'id_pembuat','id_untuk_user','username_untuk_user','jenis_layanan','jenis_pesanan','keterangan','status','dokumen','status_number'
     ];
 
 
